@@ -1,6 +1,6 @@
-from lexer import lexer
-from parser_ import Parser
-from interprete import Interprete
+from src.lexer import lexer
+from src.parser_ import Parser
+from src.interprete import Interprete
 
 def run(text):
     lista = lexer(text)

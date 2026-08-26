@@ -1,4 +1,4 @@
-from parser_ import Num
+from src.parser_ import Num
 
 class Interprete:
     
