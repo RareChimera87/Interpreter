@@ -13,12 +13,14 @@ class Token:
             return self.value
 
 
+
 class Num:
     def __init__(self, value):
           self.value = value
     
     def __repr__(self):
           return f"Num(Value={self.value!r})"
+   
       
 class BinOp:
     def __init__(self, izq, op, der):
@@ -28,6 +30,17 @@ class BinOp:
           
     def __repr__(self):
           return f"BinOp(Izquierda={self.izq}, Operador={self.op!r}, Derecha={self.der})"
+    
+    def Get_izq(self):
+            return self.izq
+        
+    def Get_op(self):
+            return self.op
+    
+    def Get_der(self):
+            return self.der
+    
+
 
 class Parser:
     def __init__(self, lista, posicion=0):
@@ -81,7 +94,13 @@ class Parser:
     def es_tipo(self, *tipos):
         actual = self.actual()
         return actual is not None and actual.Get_type() in tipos
-             
+    
+    
+    def parse(self):
+        res = self.expresion()
+        if self.actual() is not None:
+            raise ValueError("Hay argumentos de mas")
+        return res
 
             
 
@@ -95,39 +114,41 @@ def lexer(string):
     num = ""
     while pos < len(string):
         #print(len(string))
-        if string[pos] != " ":    
+        #if string[pos] != " ":    
             #print(string[pos])
-            if string[pos].isdigit():
-                #print("eeeeeeeeeeee")
-                num += string[pos]
-                #print(num)
+        if string[pos].isdigit():
+            #print("eeeeeeeeeeee")
+            num += string[pos]
+            #print(num)
+        else:
+            
+            #print("num: " + num)
+            if num != "":
+                s = Token('NUMBER', int(num))
+                output.append(s)
+                num = ""
+            if string[pos] == "+":
+                s = Token("MAS")
+                output.append(s)
+            elif string[pos] == "-":
+                        s = Token("MENOS")
+                        output.append(s)
+            elif string[pos] == "/":
+                        s = Token("DIVIDE")
+                        output.append(s)
+            elif string[pos] == "*":
+                        s = Token("POR")
+                        output.append(s)
+            elif string[pos] == "(":
+                        s = Token("LPAREN")
+                        output.append(s)
+            elif string[pos] == ")":
+                        s = Token("RPAREN")
+                        output.append(s)
+            elif string[pos] == " ":
+                        pass
             else:
-                
-                #print("num: " + num)
-                if num != "":
-                    s = Token('NUMBER', int(num))
-                    output.append(s)
-                    num = ""
-                if string[pos] == "+":
-                    s = Token("MAS")
-                    output.append(s)
-                elif string[pos] == "-":
-                            s = Token("MENOS")
-                            output.append(s)
-                elif string[pos] == "/":
-                            s = Token("DIVIDE")
-                            output.append(s)
-                elif string[pos] == "*":
-                            s = Token("POR")
-                            output.append(s)
-                elif string[pos] == "(":
-                            s = Token("LPAREN")
-                            output.append(s)
-                elif string[pos] == ")":
-                            s = Token("RPAREN")
-                            output.append(s)
-                else:
-                    raise ValueError(f"Caracter Invalido '{string[pos]}' en posicion {pos}")
+                raise ValueError(f"Caracter Invalido '{string[pos]}' en posicion {pos}")
         pos += 1                                    
     if num != "":            
         s = Token('NUMBER', int(num))
@@ -143,4 +164,4 @@ def lexer(string):
 
 #Prueba=Parser(lexer("2*3+4")).expresion()
 #print(lexer("(1+2)"))
-print(Parser(lexer("(2+3)*4")).expresion())
+print(Parser(lexer("1 2")).parse())
