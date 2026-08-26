@@ -21,7 +21,7 @@ def lexer(string):
     num = ""
     char = ""
     while pos < len(string):
-        print("POSS: ", pos)
+        #print("POSS: ", pos)
 
         if len(char) > 0 and string[pos].isalnum():
                char += string[pos] 
@@ -29,6 +29,7 @@ def lexer(string):
         elif len(num) > 0 and string[pos].isalnum():
             if string[pos].isalpha():
                  raise ValueError (f"Identificador invalido: no puede empezar con digito (posicion {pos})")
+            num += string[pos]
         elif string[pos].isdigit():
             #print("eeeeeeeeeeee")
             num += string[pos]
@@ -98,4 +99,4 @@ def lexer(string):
 
 #print(Interprete().eva(Parser(lexer("2+3*4")).parse()))
 
-print(lexer("x1+y2"))
+print(lexer("21"))
