@@ -47,15 +47,22 @@ class Parser:
     
     def factor(self):
         
-        if self.actual() is not None and self.actual().Get_type() == "NUMBER":
+        if self.es_tipo("NUMBER"):
             act = self.procesar()
             return Num(act.Get_value())
+        elif self.es_tipo("LPAREN"):
+            self.procesar()
+            res = self.expresion()
+            if not self.es_tipo("RPAREN"):
+                raise ValueError("Falta un parantesis de cierre")
+            self.procesar()
+            return res
         else:
-            raise ValueError("Se esperaba un numero")
+            raise ValueError("Se esperaba un numero o parentesis")
     
     def termino(self):
         izq = self.factor()
-        while self.actual() is not None and (self.actual().Get_type() == "POR" or self.actual().Get_type() == "DIVIDE"): 
+        while self.es_tipo("POR", "DIVIDE"): 
             operador = self.procesar().Get_type()
             der = self.factor()
             izq = BinOp(izq, operador, der)
@@ -64,12 +71,19 @@ class Parser:
 
     def expresion(self):
         izq = self.termino()
-        while self.actual() is not None and (self.actual().Get_type() == "MAS" or self.actual().Get_type() == "MENOS"): 
+        while self.es_tipo("MAS", "MENOS"): 
             operador = self.procesar().Get_type()
             der = self.termino()
             izq = BinOp(izq, operador, der)
             
         return izq
+    
+    def es_tipo(self, *tipos):
+        actual = self.actual()
+        return actual is not None and actual.Get_type() in tipos
+             
+
+            
 
 
                 
@@ -106,6 +120,12 @@ def lexer(string):
                 elif string[pos] == "*":
                             s = Token("POR")
                             output.append(s)
+                elif string[pos] == "(":
+                            s = Token("LPAREN")
+                            output.append(s)
+                elif string[pos] == ")":
+                            s = Token("RPAREN")
+                            output.append(s)
                 else:
                     raise ValueError(f"Caracter Invalido '{string[pos]}' en posicion {pos}")
         pos += 1                                    
@@ -121,5 +141,6 @@ def lexer(string):
 
 #print(arbol)
 
-Prueba=Parser(lexer("2*3+4")).expresion()
-print(Prueba)
+#Prueba=Parser(lexer("2*3+4")).expresion()
+#print(lexer("(1+2)"))
+print(Parser(lexer("(2+3)*4")).expresion())
