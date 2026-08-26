@@ -1,4 +1,4 @@
-from lexer import lexer
+#from lexer import lexer
 
 class Num:
     def __init__(self, value):
@@ -130,5 +130,5 @@ class Parser:
         return res
 
 
-Prueba=Parser(lexer("x=5+8")).parse()
-print(Prueba)
+# Prueba=Parser(lexer("x=5")).parse()
+# print(Prueba)

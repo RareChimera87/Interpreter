@@ -2,11 +2,11 @@ from src.lexer import lexer
 from src.parser_ import Parser
 from src.interprete import Interprete
 
-def run(text):
+def run(text, interpre=None):
     lista = lexer(text)
     parseado = Parser(lista).parse()
-    Interpre = Interprete()
-    output = Interpre.eva(parseado)
+    Interpret = interpre
+    output = Interpret.eva(parseado)
     
     return output
 
@@ -14,14 +14,17 @@ def run(text):
 
 if __name__ == "__main__":
     print("Escriba 'salir' para salir")
+    magia = Interprete()
     while True:
         try:
             entrada = input(">>>    ")
             if entrada == "salir":
                 break
             if entrada.strip() != "":
-                print(run(entrada))
+                print(run(entrada, magia))
         except ValueError as e:
             print(e)
         except ZeroDivisionError as e:
             print("Operacion Prohibida: ", e)
+        except NameError as e:
+            print("Unkown Variable: ", e)
