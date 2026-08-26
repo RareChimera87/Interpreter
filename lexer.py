@@ -5,6 +5,12 @@ class Token:
     
     def __repr__(self):
           return f"Token(type={self.type!r}, value={self.value!r})"
+      
+    def Get_type(self):
+        return self.type
+    
+    def Get_value(self):
+            return self.value
 
 
 class Num:
@@ -23,6 +29,50 @@ class BinOp:
     def __repr__(self):
           return f"BinOp(Izquierda={self.izq}, Operador={self.op!r}, Derecha={self.der})"
 
+class Parser:
+    def __init__(self, lista, posicion=0):
+        self.lista=lista
+        self.posicion=posicion
+    
+    def actual(self):
+        if self.posicion < len(self.lista):
+            return self.lista[self.posicion]
+        else:
+            return None
+    
+    def procesar(self):
+        act = self.actual()
+        self.posicion += 1
+        return act
+    
+    def factor(self):
+        
+        if self.actual() is not None and self.actual().Get_type() == "NUMBER":
+            act = self.procesar()
+            return Num(act.Get_value())
+        else:
+            raise ValueError("Se esperaba un numero")
+    
+    def termino(self):
+        izq = self.factor()
+        while self.actual() is not None and (self.actual().Get_type() == "POR" or self.actual().Get_type() == "DIVIDE"): 
+            operador = self.procesar().Get_type()
+            der = self.factor()
+            izq = BinOp(izq, operador, der)
+            
+        return izq
+
+    def expresion(self):
+        izq = self.termino()
+        while self.actual() is not None and (self.actual().Get_type() == "MAS" or self.actual().Get_type() == "MENOS"): 
+            operador = self.procesar().Get_type()
+            der = self.termino()
+            izq = BinOp(izq, operador, der)
+            
+        return izq
+
+
+                
 
 def lexer(string):
     output = []
@@ -66,8 +116,10 @@ def lexer(string):
             
     return(output)
         
-#print(lexer("12+2+3"))
 
-arbol = BinOp(Num(5), "MAS", BinOp(Num(3), "POR", Num(4)))
+#arbol = BinOp(Num(5), "MAS", BinOp(Num(3), "POR", Num(4)))
 
-print(arbol)
+#print(arbol)
+
+Prueba=Parser(lexer("2*3+4")).expresion()
+print(Prueba)
