@@ -19,14 +19,23 @@ def lexer(string):
     pos = 0
     #print(string)
     num = ""
+    char = ""
     while pos < len(string):
-        #print(len(string))
-        #if string[pos] != " ":    
-            #print(string[pos])
-        if string[pos].isdigit():
+        print("POSS: ", pos)
+
+        if len(char) > 0 and string[pos].isalnum():
+               char += string[pos] 
+
+        elif len(num) > 0 and string[pos].isalnum():
+            if string[pos].isalpha():
+                 raise ValueError (f"Identificador invalido: no puede empezar con digito (posicion {pos})")
+        elif string[pos].isdigit():
             #print("eeeeeeeeeeee")
             num += string[pos]
             #print(num)
+            
+        elif string[pos].isalpha():
+            char += string[pos]
         else:
             
             #print("num: " + num)
@@ -34,6 +43,10 @@ def lexer(string):
                 s = Token('NUMBER', int(num))
                 output.append(s)
                 num = ""
+            if char != "":            
+                s = Token('IDENT', char)
+                output.append(s)
+                char=""
             if string[pos] == "+":
                 s = Token("MAS")
                 output.append(s)
@@ -52,6 +65,10 @@ def lexer(string):
             elif string[pos] == ")":
                         s = Token("RPAREN")
                         output.append(s)
+            elif string[pos] == "=":
+                        s = Token("ASIGNAR")
+                        output.append(s)
+                        
             elif string[pos] == " ":
                         pass
             else:
@@ -60,6 +77,10 @@ def lexer(string):
     if num != "":            
         s = Token('NUMBER', int(num))
         output.append(s)
+    if char != "":            
+            s = Token('IDENT', char)
+            output.append(s)
+
             
             
     return(output)
@@ -76,3 +97,5 @@ def lexer(string):
 #algo.eva(((Parser(lexer("2+3*4")).parse())))
 
 #print(Interprete().eva(Parser(lexer("2+3*4")).parse()))
+
+print(lexer("x1+y2"))
