@@ -20,6 +20,9 @@ class Num:
     
     def __repr__(self):
           return f"Num(Value={self.value!r})"
+      
+    def get_value(self):
+        return self.value
    
       
 class BinOp:
@@ -102,7 +105,30 @@ class Parser:
             raise ValueError("Hay argumentos de mas")
         return res
 
+
+class Interprete:
+    
+    def eva(self, arbol):
+        if not isinstance(arbol, Num):
+            izq = self.eva(arbol.Get_izq())
             
+            der = self.eva(arbol.Get_der())
+            
+            op = arbol.Get_op()
+            if op == "MAS":
+                return izq + der
+            elif op == "MENOS":
+                return izq - der
+            elif op == "POR":
+                return izq * der
+            elif op == "DIVIDE":
+                return izq / der
+            else:
+                raise ValueError("Operador no conocido")
+            
+        else:
+            return arbol.get_value()
+        
 
 
                 
@@ -164,4 +190,8 @@ def lexer(string):
 
 #Prueba=Parser(lexer("2*3+4")).expresion()
 #print(lexer("(1+2)"))
-print(Parser(lexer("1 2")).parse())
+
+#algo = Interprete()
+#algo.eva(((Parser(lexer("2+3*4")).parse())))
+
+print(Interprete().eva(Parser(lexer("2+3*4")).parse()))
