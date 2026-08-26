@@ -4,11 +4,11 @@ class Interprete:
     
     def eva(self, arbol):
         if not isinstance(arbol, Num):
-            izq = self.eva(arbol.Get_izq())
+            izq = self.eva(arbol.get_izq())
             
-            der = self.eva(arbol.Get_der())
+            der = self.eva(arbol.get_der())
             
-            op = arbol.Get_op()
+            op = arbol.get_op()
             if op == "MAS":
                 return izq + der
             elif op == "MENOS":

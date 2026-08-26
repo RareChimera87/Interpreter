@@ -6,10 +6,10 @@ class Token:
     def __repr__(self):
           return f"Token(type={self.type!r}, value={self.value!r})"
       
-    def Get_type(self):
+    def get_type(self):
         return self.type
     
-    def Get_value(self):
+    def get_value(self):
             return self.value
 
             
@@ -99,4 +99,4 @@ def lexer(string):
 
 #print(Interprete().eva(Parser(lexer("2+3*4")).parse()))
 
-print(lexer("21"))
+#print(lexer("21"))
