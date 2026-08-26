@@ -13,4 +13,15 @@ def run(text):
 
 
 if __name__ == "__main__":
-    print(run("2+3*4"))
+    print("Escriba 'salir' para salir")
+    while True:
+        try:
+            entrada = input(">>>    ")
+            if entrada == "salir":
+                break
+            if entrada.strip() != "":
+                print(run(entrada))
+        except ValueError as e:
+            print(e)
+        except ZeroDivisionError as e:
+            print("Operacion Prohibida: ", e)
