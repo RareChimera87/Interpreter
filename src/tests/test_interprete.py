@@ -1,4 +1,5 @@
 from src.main import run
+from src.interprete import Interprete
 import pytest
 
 def test_suma():
@@ -56,3 +57,33 @@ def test_dos_grupos_hermanos():
 def test_caracter_invalido():
     with pytest.raises(ValueError):
         run("1@2")
+        
+def test_asignacion_devuelve_valor():
+    assert run("x = 5") == 5
+
+def test_asignacion_con_expresion():
+    assert run("x = 2 + 3 * 4") == 14
+
+def test_variable_no_definida():
+    with pytest.raises(NameError):
+        run("y + 1")
+
+def test_asignacion_encadenada():
+    assert run("x = y = 8") == 8
+    
+def test_entorno_persiste_entre_llamadas():
+    interp = Interprete()
+    run("x = 5", interp)
+    assert run("x + 1", interp) == 6
+
+def test_entornos_separados_estan_aislados():
+    interp = Interprete()
+    run("x = 5", interp)
+    with pytest.raises(NameError):
+        run("x")          # sin intérprete: entorno nuevo, x no existe
+
+def test_reasignacion():
+    interp = Interprete()
+    run("x = 5", interp)
+    run("x = 10", interp)
+    assert run("x", interp) == 10

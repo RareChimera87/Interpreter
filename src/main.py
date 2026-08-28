@@ -3,6 +3,8 @@ from src.parser_ import Parser
 from src.interprete import Interprete
 
 def run(text, interpre=None):
+    if interpre is None:
+        interpre = Interprete()
     lista = lexer(text)
     parseado = Parser(lista).parse()
     Interpret = interpre
