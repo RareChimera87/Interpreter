@@ -1,4 +1,4 @@
-from src.parser_ import Num, Var, BinOp, Asignacion
+from src.parser_ import Num, Var, BinOp, Asignacion, Programa
 
 class Interprete:
     def __init__(self):
@@ -24,6 +24,12 @@ class Interprete:
         
         self.assign(name, value)
         return self.get(name)
+    
+    def programa_type(self, programa):
+        value = None
+        for i in programa.get_value():
+            value = self.check_type(i)
+        return value
         
     
     def binOp_type(self, binop):
@@ -54,6 +60,8 @@ class Interprete:
             value = self.binOp_type(value)
         elif isinstance(value, Asignacion):
             value = self.asignacion_type(value)
+        elif isinstance(value, Programa):
+            value = self.programa_type(value)
         else:
             raise ValueError("Unkown type")
         

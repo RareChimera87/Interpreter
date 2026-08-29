@@ -53,6 +53,16 @@ class Asignacion:
     def get_name(self):
             return self.name
 
+class Programa:
+    def __init__(self, lista_nodos):
+         self.lista_nodos = lista_nodos
+    
+    def __repr__(self):
+         return f"Programa(Nodos={self.lista_nodos!r})"
+     
+    def get_value(self):
+        return self.lista_nodos
+
 class Parser:
     def __init__(self, lista, posicion=0):
         self.lista=lista
@@ -116,19 +126,31 @@ class Parser:
             return Asignacion(izq.get_name(), der)
         else:
             raise ValueError("Erro de operacion")
+        
+    def programa(self):
+        lista_nodos = []
+        while self.hay_tokens():
+            if self.es_tipo("PUNTOCOMA"):
+                self.procesar()
+                continue
+            else:    
+                lista_nodos.append(self.asignacion())
+        
+        return Programa(lista_nodos)
 
     
     def es_tipo(self, *tipos):
         actual = self.actual()
-        return actual is not None and actual.get_type() in tipos
+        return self.hay_tokens() and actual.get_type() in tipos
+    
+    
+    def hay_tokens(self):
+        return self.actual() is not None
     
     
     def parse(self):
-        res = self.asignacion()
-        if self.actual() is not None:
-            raise ValueError("Hay argumentos de mas")
-        return res
+        return self.programa()
 
 
-# Prueba=Parser(lexer("x=5")).parse()
-# print(Prueba)
+#Prueba=Parser(lexer("5+2; x=y")).parse()
+#print(Prueba)

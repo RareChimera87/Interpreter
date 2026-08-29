@@ -9,6 +9,8 @@ def run(text, interpre=None):
     parseado = Parser(lista).parse()
     Interpret = interpre
     output = Interpret.eva(parseado)
+    if output is None:
+        return ""
     
     return output
 

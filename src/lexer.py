@@ -69,6 +69,9 @@ def lexer(string):
             elif string[pos] == "=":
                         s = Token("ASIGNAR")
                         output.append(s)
+            elif string[pos] == ";":
+                s = Token("PUNTOCOMA")
+                output.append(s)
                         
             elif string[pos] == " ":
                         pass
@@ -99,4 +102,4 @@ def lexer(string):
 
 #print(Interprete().eva(Parser(lexer("2+3*4")).parse()))
 
-#print(lexer("21"))
+#print(lexer("x=2;y=2"))
