@@ -9,8 +9,6 @@ def run(text, interpre=None):
     parseado = Parser(lista).parse()
     Interpret = interpre
     output = Interpret.eva(parseado)
-    if output is None:
-        return ""
     
     return output
 
@@ -25,7 +23,9 @@ if __name__ == "__main__":
             if entrada == "salir":
                 break
             if entrada.strip() != "":
-                print(run(entrada, magia))
+                sss = run(entrada, magia)
+                if sss is not None:
+                    print(sss)
         except ValueError as e:
             print(e)
         except ZeroDivisionError as e:

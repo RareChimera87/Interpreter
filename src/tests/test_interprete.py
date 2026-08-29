@@ -87,3 +87,26 @@ def test_reasignacion():
     run("x = 5", interp)
     run("x = 10", interp)
     assert run("x", interp) == 10
+    
+def test_multiples_sentencias():
+    assert run("x = 5; y = 10; x + y") == 15
+
+def test_punto_y_coma_final_opcional():
+    assert run("x = 1;") == 1
+
+def test_programa_vacio():
+    assert run("") is None
+
+def test_punto_y_coma_vacios_se_ignoran():
+    assert run("x=1;;y=2") == 2
+
+def test_solo_punto_y_coma():
+    assert run(";") is None
+
+def test_asignaciones_intermedias_persisten():
+    interp = Interprete()
+    run("x = 5; y = x * 2", interp)
+    assert run("y", interp) == 10
+
+def test_devuelve_valor_de_ultima_sentencia():
+    assert run("1; 2; 3") == 3
